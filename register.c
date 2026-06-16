@@ -79,26 +79,23 @@ static void ValidateInput(const char *prompt, const char *error_msg, char *buffe
 
 void registration(char CustomerName[100], char PhoneNumber[20], char CustomerEmail[100])
 {
-    printf ("-----Registration Form-----\n");
+    printf("-----Registration Form-----\n");
 
     // ask user to input name
     ValidateInput(
-        "Enter your name: ", 
+        "Enter your name: ",
         "Names must contains only letters, space or hyphens.",
-        CustomerName, 100, ValidateName
-    );
+        CustomerName, 100, ValidateName);
 
-    //ask user to input email
+    // ask user to input email
     ValidateInput(
         "Enter your email: ",
         "Enter a valid email, e.g: user@gmail.com",
-        CustomerEmail, 100, ValidateEmail
-    );
+        CustomerEmail, 100, ValidateEmail);
 
-    //ask user to input phone number
+    // ask user to input phone number
     ValidateInput(
         "Enter your phone number: ",
         "Phone number must be atleast 9 digits.",
-        PhoneNumber, 20, ValidatePhone
-    );
+        PhoneNumber, 20, ValidatePhone);
 }
