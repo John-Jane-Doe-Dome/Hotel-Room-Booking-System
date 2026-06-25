@@ -24,8 +24,6 @@ int main()
     printf("\n==============================\n");
     printf("Welcome, %s \n", CustomerName);
     printf("How can we help you today?\n");
-    printf("1. View rooms\n2. Book rooms\n3. View Booking\n4. Check-in\n5. Check-out\n6. Exit");
-    printf("\n==============================\n");
 
     // Menu
     int choice;
@@ -33,6 +31,8 @@ int main()
     do
     {
         // for user to pick an action that they want to do
+        printf("1. View rooms\n2. Book rooms\n3. View Booking\n4. Check-in\n5. Check-out\n6. Exit");
+        printf("\n==============================\n");
         printf("Please pick an action (1-6): ");
         scanf("%d", &choice);
 
