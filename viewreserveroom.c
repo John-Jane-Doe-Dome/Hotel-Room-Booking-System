@@ -110,7 +110,7 @@ void display_all_rooms(struct Room rooms[], int total)
 void display_available_room(struct Room rooms[], int total, char type[])
 {
     int found = 0;
-    printf("Availble %s rooms: \n", type);
+    printf("Available %s rooms: \n", type);
     printf("-----------------------\n");
 
     for (int i = 0; i < total; i++)

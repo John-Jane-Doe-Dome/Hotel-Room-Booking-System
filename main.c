@@ -49,8 +49,8 @@ int main()
             break;
         case 3:
             break;
-            check_in(rooms, total);
         case 4:
+            check_in(rooms, total);
             break;
         case 5:
             check_out(rooms, total);
