@@ -7,7 +7,7 @@
 
 static int ValidateName(const char *name)
 {
-    if (strlen == 0)
+    if (strlen(name) == 0)
     {
         printf("Name must not be empty.");
         return 0;
@@ -44,7 +44,7 @@ static int ValidateEmail(const char *email)
 static int ValidatePhone(const char *phone)
 {
     int i = 0;
-    if (strlen(phone + 1) < 9) // minimum of 9 numbers
+    if (strlen(phone) < 9) // minimum of 9 numbers
     {
         return 0;
     }
