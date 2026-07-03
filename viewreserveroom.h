@@ -26,6 +26,7 @@ struct Room
     char phone[20];  // guest phone number when book
     char email[100]; // guest email when book
     int nights;      // amount of nights
+    float price;
 };
 
 // booking records
@@ -42,6 +43,8 @@ struct bookings
 };
 
 // list of fuction used
+void edit_room(struct Room room[], int total);
+void admin_menu(struct Room room[],int total);
 void init_rooms(struct Room rooms[], int *total);
 void display_all_rooms(struct Room rooms[], int total);
 void book_room(struct Room rooms[], int total, char name[], char phone[], char email[]);
