@@ -78,7 +78,7 @@ void book_room(struct Room rooms[], int total, char name[], char phone[], char e
     // validates wether the room is the type of room that the customer asked for
     if (strcmp(rooms[position].type, type) != 0)
     {
-        printf("Room %d is a %s room.\n", numbers, type);
+        printf("Room %d is not a %s room.\n", numbers, type);
         return;
     }
 

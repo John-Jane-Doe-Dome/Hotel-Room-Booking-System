@@ -8,7 +8,7 @@
  each floors has 10 rooms
  the first 5 rooms will be single
  the next 3 rooms will be double
- the last 2 is suite
+ the last 2 is fami
 */
 
 void init_rooms(struct Room rooms[], int *total)

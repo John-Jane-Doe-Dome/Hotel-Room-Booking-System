@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include "register.h"
 #include "viewreserveroom.h"
 int main()
@@ -48,6 +47,7 @@ int main()
             book_room(rooms, total, CustomerName, PhoneNumber, CustomerEmail);
             break;
         case 3:
+            view_booking(rooms, total);
             break;
         case 4:
             check_in(rooms, total);

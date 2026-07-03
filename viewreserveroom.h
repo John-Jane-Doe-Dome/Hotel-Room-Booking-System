@@ -47,7 +47,8 @@ void display_all_rooms(struct Room rooms[], int total);
 void book_room(struct Room rooms[], int total, char name[], char phone[], char email[]);
 void display_available_room(struct Room rooms[], int total, char type[]);
 int find_room(struct Room rooms[], int total, int number);
-void check_in(struct Room roooms[], int total);
+void check_in(struct Room rooms[], int total);
 void check_out(struct Room rooms[], int total);
+void view_booking(struct Room rooms[], int total);
 
 #endif
