@@ -32,14 +32,17 @@ void init_rooms(struct Room rooms[], int *total)
             if (slot <= 5)
             {
                 strcpy(rooms[*total].type, "Single");
+                rooms[*total].price = RATE_SINGLE;
             }
             else if (slot <= 8)
             {
                 strcpy(rooms[*total].type, "Double");
+                rooms[*total].price = RATE_DOUBLE;
             }
             else
             {
                 strcpy(rooms[*total].type, "Family");
+                rooms[*total].price = RATE_FAMILY;
             }
             rooms[*total].status = AVAILABLE;
             rooms[*total].guest[0] = '\0';
@@ -143,4 +146,66 @@ int find_room(struct Room rooms[], int total, int numbers)
             return i; // finds it and return its position
     }
     return -1; // doesn't find anything
+}
+
+void edit_room(struct Room rooms[], int total)
+{
+    int roomNum, idx;
+
+    display_all_rooms(rooms, total);
+
+    printf("Enter the room number to edit: ");
+    scanf("%d", &roomNum);
+    while (getchar() != '\n');
+
+    idx = find_room(rooms, total, roomNum);   /* reuse your existing search function */
+
+    if (idx == -1)
+    {
+        printf("Room number %d not found.\n", roomNum);
+        return;
+    }
+
+    printf("Current floor: %d, Current price: %.2f\n", rooms[idx].floors, rooms[idx].price);
+
+    printf("Enter new floor: ");
+    scanf("%d", &rooms[idx].floors);
+    while (getchar() != '\n');
+
+    printf("Enter new price: ");
+    scanf("%f", &rooms[idx].price);
+    while (getchar() != '\n');
+
+    printf("Room %d updated successfully.\n", rooms[idx].numbers);
+}
+
+void admin_menu(struct Room rooms[], int total)
+{
+    int choice;
+
+    do
+    {
+        printf("\n===== ADMIN MENU =====\n");
+        printf("1. View rooms\n2. Edit room (floor/price)\n3. Exit to main menu\n");
+        printf("=======================\n");
+        printf("Please pick an action (1-3): ");
+        scanf("%d", &choice);
+        while (getchar() != '\n');
+
+        switch (choice)
+        {
+        case 1:
+            display_all_rooms(rooms, total);
+            break;
+        case 2:
+            edit_room(rooms, total);
+            break;
+        case 3:
+            printf("Exiting admin menu.\n");
+            break;
+        default:
+            printf("Invalid choice.\n");
+            break;
+        }
+    } while (choice != 3);
 }
