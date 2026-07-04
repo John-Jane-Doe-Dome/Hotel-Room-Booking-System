@@ -148,6 +148,115 @@ int find_room(struct Room rooms[], int total, int numbers)
     return -1; // doesn't find anything
 }
 
+//admin set up the hotel at once:
+//- input the number of floors
+//- input how many single rooms, double rooms, and family rooms per floor and price for each type
+void setup_hotel(struct Room rooms[], int *total)
+{
+    int numfloors, singleCount, doubleCount, familyCount,totalRoom;
+    float singlePrice, doublePrice, familyPrice;
+    printf("---------------HOTEL SETUP----------------\n");
+    printf("Enter the number of floors: ");
+    scanf("%d", &numfloors);
+    while (getchar() != '\n');
+
+    printf("Enter the number of single rooms per floor: ");
+    scanf("%d", &singleCount);
+    while (getchar() != '\n');
+    printf("Enter the price for single rooms: ");
+    scanf("%f", &singlePrice);
+    while (getchar() != '\n');
+
+    printf("Enter the number of double rooms per floor: ");
+    scanf("%d", &doubleCount);
+    while (getchar() != '\n');
+    printf("Enter the price for double rooms: ");
+    scanf("%f", &doublePrice);
+    while (getchar() != '\n');
+
+    printf("Enter the number of family rooms per floor: ");
+    scanf("%d", &familyCount);
+    while (getchar() != '\n');
+    printf("Enter the price for family rooms: ");
+    scanf("%f", &familyPrice);
+    while (getchar() != '\n');
+
+    if (singleCount < 0 || doubleCount < 0 || familyCount < 0)
+    {
+        printf("Error: Number of rooms cannot be negative.\n");
+        return;
+    }
+
+    if (singlePrice <= 0 || doublePrice <= 0 || familyPrice <= 0)
+    {
+        printf("Error: Price must be greater than zero.\n");
+        return;
+    }
+
+    totalRoom = singleCount + doubleCount + familyCount;
+
+    if (totalRoom < 1) {
+        printf("Error: Total number of rooms per floor must be at least 1.\n");
+        return;
+    }
+    if (totalRoom > MAX_ROOMS) {
+        printf("Error: Total number of rooms per floor exceeds the maximum limit.\n");
+        return;
+    }
+
+    int roomPerfloor = (totalRoom + numfloors - 1) / numfloors; // Calculate rooms per floor
+    int index = 0;
+
+    /* Generate Single rooms */
+    for (int i = 0; i < singleCount; i++, index++) {
+        int floor = (index / roomPerfloor) + 1;
+        int slot = (index % roomPerfloor) + 1;
+        rooms[index].numbers = (floor * 100) + slot;
+        rooms[index].floors = floor;
+        strcpy(rooms[index].type, "Single");
+        rooms[index].price = singlePrice;
+        rooms[index].status = AVAILABLE;
+        rooms[index].guest[0] = '\0';
+        rooms[index].phone[0] = '\0';
+        rooms[index].email[0] = '\0';
+        rooms[index].nights = 0;
+    }
+
+    /* Generate Double rooms */
+    for (int i = 0; i < doubleCount; i++, index++) {
+        int floor = (index / roomPerfloor) + 1;
+        int slot = (index % roomPerfloor) + 1;
+        rooms[index].numbers = (floor * 100) + slot;
+        rooms[index].floors = floor;
+        strcpy(rooms[index].type, "Double");
+        rooms[index].price = doublePrice;
+        rooms[index].status = AVAILABLE;
+        rooms[index].guest[0] = '\0';
+        rooms[index].phone[0] = '\0';
+        rooms[index].email[0] = '\0';
+        rooms[index].nights = 0;
+    }
+
+    /* Generate Family rooms */
+    for (int i = 0; i < familyCount; i++, index++) {
+        int floor = (index / roomPerfloor) + 1;
+        int slot = (index % roomPerfloor) + 1;
+        rooms[index].numbers = (floor * 100) + slot;
+        rooms[index].floors = floor;
+        strcpy(rooms[index].type, "Family");
+        rooms[index].price = familyPrice;
+        rooms[index].status = AVAILABLE;
+        rooms[index].guest[0] = '\0';
+        rooms[index].phone[0] = '\0';
+        rooms[index].email[0] = '\0';
+        rooms[index].nights = 0;
+    }
+    *total = totalRoom;
+
+    save_rooms_to_file(rooms, *total);
+    printf("Hotel setup completed successfully!\n");
+}
+
 void edit_room(struct Room rooms[], int total)
 {
     int roomNum, idx;
@@ -176,19 +285,20 @@ void edit_room(struct Room rooms[], int total)
     scanf("%f", &rooms[idx].price);
     while (getchar() != '\n');
 
+    save_rooms_to_file(rooms, total);
     printf("Room %d updated successfully.\n", rooms[idx].numbers);
 }
 
 void admin_menu(struct Room rooms[], int total)
 {
     int choice;
-
+    
     do
     {
-        printf("\n===== ADMIN MENU =====\n");
-        printf("1. View rooms\n2. Edit room (floor/price)\n3. Exit to main menu\n");
-        printf("=======================\n");
-        printf("Please pick an action (1-3): ");
+        printf("\n------------ADMIN MENU------------\n");
+        printf("1. View rooms\n2. Set up hotel\n3. Edit room (floor/price)\n4. Exit to main menu\n");
+        printf("------------------------------------\n");
+        printf("Please pick an action (1-4): ");
         scanf("%d", &choice);
         while (getchar() != '\n');
 
@@ -198,14 +308,70 @@ void admin_menu(struct Room rooms[], int total)
             display_all_rooms(rooms, total);
             break;
         case 2:
-            edit_room(rooms, total);
+            setup_hotel(rooms, &total);
             break;
         case 3:
+            edit_room(rooms, total);
+            break;
+        case 4:
             printf("Exiting admin menu.\n");
             break;
         default:
             printf("Invalid choice.\n");
             break;
         }
-    } while (choice != 3);
+    } while (choice != 4);
+}
+
+void save_rooms_to_file(struct Room rooms[], int total)
+{
+    FILE *file = fopen("rooms.txt", "w");
+    if (file == NULL)
+    {
+        printf("Error opening file for writing.\n");
+        return;
+    }
+    for (int i = 0; i < total; i++)
+    {
+        fprintf(file, "%d %d %s %d %s %s %s %d %.2f\n",
+                rooms[i].numbers,
+                rooms[i].floors,
+                rooms[i].type,
+                rooms[i].status,
+                strlen(rooms[i].guest) > 0 ? rooms[i].guest : "N/A",
+                strlen(rooms[i].phone) > 0 ? rooms[i].phone : "N/A",
+                strlen(rooms[i].email) > 0 ? rooms[i].email : "N/A",
+                rooms[i].nights,
+                rooms[i].price);
+    }
+    fclose(file);
+}
+
+int load_rooms_from_file(struct Room rooms[], int *total)
+{
+    FILE *fp = fopen("room.txt", "r");
+    if (fp == NULL) {
+        *total = 0;
+        return 0;
+    }
+
+    *total = 0;
+    while (*total < MAX_ROOMS && fscanf(fp, "%d %d %14s %d %f %99s %19s %99s %d",
+                &rooms[*total].numbers,
+                &rooms[*total].floors,
+                rooms[*total].type,
+                &rooms[*total].status,
+                &rooms[*total].price,
+                rooms[*total].guest,
+                rooms[*total].phone,
+                rooms[*total].email,
+                &rooms[*total].nights) == 9)
+    {
+        if (strcmp(rooms[*total].guest, "-") == 0) rooms[*total].guest[0] = '\0';
+        if (strcmp(rooms[*total].phone, "-") == 0) rooms[*total].phone[0] = '\0';
+        if (strcmp(rooms[*total].email, "-") == 0) rooms[*total].email[0] = '\0';
+        (*total)++;
+    }
+    fclose(fp);
+    return 1;
 }
