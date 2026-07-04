@@ -23,14 +23,18 @@ int main()
     char CustomerEmail[100];
 
     // creates the room
-    init_rooms(rooms, &total);
+    if (!load_rooms_from_file(rooms, &total)) {
+        printf("No custom hotel setup found. Loading default hotel configuration...\n");
+        init_rooms(rooms, &total);
+        save_rooms_to_file(rooms, total);
+    }
 
     int role;
     do {
         printf("\n===================================\n");
-        printf("Are you logging is as: \n1. Admin\n2. Customer\n");
+        printf("Are you logging in as (1. Admin 2. Customer 3. Exit) \n");
         printf("===================================\n");
-        printf("please pick (1-2): \n");
+        printf("logging as: ");
         scanf("%d",&role);
         while(getchar() != '\n');
         switch (role) 
@@ -52,8 +56,11 @@ int main()
                 break;
             case 2:
                 break;
+            case 3:
+                printf("Exiting the program.\n");
+                return 0;
             default:
-                printf("Invalid choice. Please select 1 or 2.\n");
+                printf("Invalid choice. Please select 1, 2, or 3.\n");
                 break;
         }
     } while (role != 2);
