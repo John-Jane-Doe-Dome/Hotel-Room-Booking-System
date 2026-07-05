@@ -13,8 +13,8 @@ void fix_type(char type[])
 
     type[0] = toupper(type[0]);
 }
-// gets the prices from the header files
 
+// gets the prices from the header files
 float get_rate(char type[])
 {
     if (strcmp(type, "Single") == 0)
@@ -27,9 +27,7 @@ float get_rate(char type[])
     return 0;
 }
 
-/*
- allows the customer to be able to book the room
-*/
+/*allows the customer to be able to book the room*/
 
 void book_room(struct Room rooms[], int total, char name[], char phone[], char email[])
 {
@@ -53,6 +51,7 @@ void book_room(struct Room rooms[], int total, char name[], char phone[], char e
         strcmp(type, "Family") != 0)
     {
         printf("Invalid room type. Please enter Single, Double, or Family.\n");
+        printf("==============================\n");
         return;
     }
 
@@ -72,13 +71,15 @@ void book_room(struct Room rooms[], int total, char name[], char phone[], char e
     if (position == -1)
     {
         printf("Room %d does not exist.\n", numbers);
+        printf("==============================\n");
         return;
     }
 
     // validates wether the room is the type of room that the customer asked for
     if (strcmp(rooms[position].type, type) != 0)
     {
-        printf("Room %d is a %s room.\n", numbers, type);
+        printf("Room %d is not a room in the %s category.\n", numbers, type);
+        printf("==============================\n");
         return;
     }
 
@@ -86,6 +87,7 @@ void book_room(struct Room rooms[], int total, char name[], char phone[], char e
     if (rooms[position].status != AVAILABLE)
     {
         printf("Room %d is not available for booking.\n", numbers);
+        printf("==============================\n");
         return;
     }
 
@@ -96,10 +98,12 @@ void book_room(struct Room rooms[], int total, char name[], char phone[], char e
         ;
 
     // validate the amount of nights
+    loop_start:
     if (nights < 1 || nights > 30)
     {
         printf("Please enter the correct amount of nights(1-30).\n");
-        return;
+        printf("==============================\n");
+        goto loop_start;
     }
 
     // saves the information
@@ -108,6 +112,9 @@ void book_room(struct Room rooms[], int total, char name[], char phone[], char e
     strcpy(rooms[position].phone, phone);
     strcpy(rooms[position].email, email);
     rooms[position].nights = nights;
+
+    // persist the updated room data to file
+    save_rooms_to_file(rooms, total);
 
     // print the confirmation of the bookings
     printf("==============================\n");
@@ -119,7 +126,7 @@ void book_room(struct Room rooms[], int total, char name[], char phone[], char e
     printf("Floor: %d\n", rooms[position].floors);
     printf("Room: %d (%s)\n", rooms[position].numbers, rooms[position].type);
     printf("Night: %d\n", nights);
-    printf("Rate: %.2f\n", get_rate(type));
-    printf("Total: %.2f\n", get_rate(type) * nights);
+    printf("Rate: %.2f\n", rooms[position].price);
+    printf("Total: %.2f\n", rooms[position].price * nights);
     printf("==============================\n\n");
 }

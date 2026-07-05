@@ -8,7 +8,7 @@
  each floors has 10 rooms
  the first 5 rooms will be single
  the next 3 rooms will be double
- the last 2 is suite
+ the last 2 is fami
 */
 
 void init_rooms(struct Room rooms[], int *total)
@@ -20,7 +20,6 @@ void init_rooms(struct Room rooms[], int *total)
     // go through each floors
     for (floors = 1; floors <= FLOORS; floors++)
     {
-
         // go through each room in the floor
         for (slot = 1; slot <= ROOMS_PER_FLOORS; slot++)
         {
@@ -32,14 +31,17 @@ void init_rooms(struct Room rooms[], int *total)
             if (slot <= 5)
             {
                 strcpy(rooms[*total].type, "Single");
+                rooms[*total].price = RATE_SINGLE;
             }
             else if (slot <= 8)
             {
                 strcpy(rooms[*total].type, "Double");
+                rooms[*total].price = RATE_DOUBLE;
             }
             else
             {
                 strcpy(rooms[*total].type, "Family");
+                rooms[*total].price = RATE_FAMILY;
             }
             rooms[*total].status = AVAILABLE;
             rooms[*total].guest[0] = '\0';
@@ -100,6 +102,34 @@ void display_all_rooms(struct Room rooms[], int total)
         }
     }
     printf("---------------------------------------\n\n");
+    printf("==============================\n");
+}
+
+//display all rooms and info for admin to see
+void display_all_rooms_for_admin(struct Room rooms[], int total, char name[], char phone[], char email[])
+{
+    printf("-------------------------------------------------------------------------------------------------\n");
+    printf("%-6s %-6s %-8s %-12s %-20s %-20s %-30s\n", "Room", "Floor", "Type", "Status", "Guest", "Phone", "Email");
+    printf("-------------------------------------------------------------------------------------------------\n");
+    for (int i = 0; i < total; i++)
+    {
+        printf("%-6d %-6d %-8s %-12s",
+               rooms[i].numbers,
+               rooms[i].floors,
+               rooms[i].type,
+               status_word(rooms[i].status));
+        // only shows a name, phone number, and email if the room is occupied
+        if (rooms[i].status == AVAILABLE)
+        {
+            printf("%-20s %-20s %-30s\n", "-", "-", "-");
+        }
+        else
+        {
+            printf("%-20s %-20s %-30s\n", rooms[i].guest, rooms[i].phone, rooms[i].email);
+        }
+    }
+    printf("---------------------------------------\n\n");
+    printf("==============================\n");
 }
 
 /*
@@ -110,7 +140,7 @@ void display_all_rooms(struct Room rooms[], int total)
 void display_available_room(struct Room rooms[], int total, char type[])
 {
     int found = 0;
-    printf("Availble %s rooms: \n", type);
+    printf("Available %s rooms: \n", type);
     printf("-----------------------\n");
 
     for (int i = 0; i < total; i++)

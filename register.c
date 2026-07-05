@@ -99,4 +99,3 @@ void registration(char CustomerName[100], char PhoneNumber[20], char CustomerEma
         "Phone number must be atleast 9 digits.",
         PhoneNumber, 20, ValidatePhone);
 }
-

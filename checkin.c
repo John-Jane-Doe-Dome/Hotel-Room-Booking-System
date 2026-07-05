@@ -1,16 +1,16 @@
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
+#include "register.h"
 #include "viewreserveroom.h"
 // finds the room
-void check_in(struct Room rooms[], int total)
+void check_in(struct Room rooms[], int total, char name[], char phone[], char email[])
 {
     int numbers;
     int position;
-    printf("Enter the number of the room you have booked: ");
+    printf("Enter the room number you have booked: ");
     scanf("%d", &numbers);
-    while (getchar() != '\n')
-        ;
+    while (getchar() != '\n');
 
     position = find_room(rooms, total, numbers);
 
@@ -18,6 +18,7 @@ void check_in(struct Room rooms[], int total)
     if (position == -1)
     {
         printf("Room %d does not exist.\n", numbers);
+        printf("==============================\n");
         return;
     }
 
@@ -25,11 +26,25 @@ void check_in(struct Room rooms[], int total)
     if (rooms[position].status != RESERVED)
     {
         printf("Room %d has not been booked.\n", numbers);
+        printf("==============================\n");
+        return;
+    }
+
+    // verify that the person checking in matches the registered booking
+    if (strcasecmp(name, rooms[position].guest) != 0 ||
+        strcmp(phone, rooms[position].phone) != 0 ||
+        strcasecmp(email, rooms[position].email) != 0)
+    {
+        printf("\nVerification failed. Your registered details do not match this booking.\n");
+        printf("==============================\n");
         return;
     }
 
     // update the information
     rooms[position].status = OCCUPIED;
+
+    // persist the updated room data to file
+    save_rooms_to_file(rooms, total);
 
     // tell the user they have been successfully checked-in
     printf("==============================\n");
@@ -42,5 +57,6 @@ void check_in(struct Room rooms[], int total)
     printf("Room: %d (%s)\n", rooms[position].numbers, rooms[position].type);
     printf("Night: %d\n", rooms[position].nights);
     printf("==============================\n");
-    printf("Please enjoy your stay!\n\n");
+    printf("Please enjoy your stay %s!\n\n", rooms[position].guest);
+    printf("==============================\n");
 }
