@@ -17,7 +17,6 @@ int main()
     char CustomerName[100];
     char PhoneNumber[20];
     char CustomerEmail[100];
-    load_rooms_from_file(rooms, &total);
 
     // creates the room
     if (!load_rooms_from_file(rooms, &total))
@@ -68,20 +67,7 @@ int main()
             printf("Invalid choice. Please select 1, 2, or 3.\n");
             break;
         }
-    }
-    else if (strcasecmp(role, "customer") == 0) {
-        break; // exit the loop and proceed to customer registration
-    }
-    else if (strcasecmp(role, "exit") == 0) {
-        printf("Exiting the program.\n");
-        return 0;
-    }
-    else {
-        printf("Invalid choice. Please type admin, customer, or exit.\n");
-    }
-
-} while (strcasecmp(role, "exit") != 0);
-
+    } while (role != 2);
     // register the customer information
     registration(CustomerName, PhoneNumber, CustomerEmail);
 
@@ -102,7 +88,8 @@ int main()
         scanf("%d", &choice);
 
         // ← flush leftover newline
-        while (getchar() != '\n');
+        while (getchar() != '\n')
+            ;
         switch (choice)
         {
         case 1:
@@ -115,10 +102,10 @@ int main()
             view_booking(rooms, total);
             break;
         case 4:
-            check_in(rooms, total, CustomerName, PhoneNumber, CustomerEmail);
+            check_in(rooms, total);
             break;
         case 5:
-            check_out(rooms, total, CustomerName, PhoneNumber, CustomerEmail);
+            check_out(rooms, total);
             break;
         case 6:
             printf("Thank you %s!", CustomerName);
