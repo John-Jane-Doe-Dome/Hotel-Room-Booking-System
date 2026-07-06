@@ -104,8 +104,12 @@ do{
             // function menu for admin
             admin_menu(rooms, total);
         } else {
+<<<<<<< HEAD
             printf("Incorrect password. Access denied.\n");
 >>>>>>> Bot
+=======
+            printf("Incorrect password. Access denied.\n"); // goes back to ask who we're logging in as
+>>>>>>> Vichea's-Draft
         }
     }
     else if (strcasecmp(role, "customer") == 0) {
