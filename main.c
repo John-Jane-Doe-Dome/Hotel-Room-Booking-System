@@ -6,30 +6,29 @@
 #include "checkin.c"
 #include "checkoutpay.c"
 #include "booking.c"
-
+ 
 #define Admin_Password "1234"
-
+ 
 int main()
 {
     // storage
-
+ 
     struct Room rooms[MAX_ROOMS];
     int total = 0;
-
-<<<<<<< HEAD
+ 
     // customer information
-
+ 
     char CustomerName[100];
     char PhoneNumber[20];
     char CustomerEmail[100];
-
+ 
     // creates the room
     if (!load_rooms_from_file(rooms, &total)) {
         printf("No custom hotel setup found. Loading default hotel configuration...\n");
         init_rooms(rooms, &total);
         save_rooms_to_file(rooms, total);
     }
-
+ 
     int role;
     do {
         printf("\n===================================\n");
@@ -47,7 +46,9 @@ int main()
                 while(getchar() != '\n');
                 
                 if (strcmp(password, Admin_Password) == 0) {
-                    admin_menu(rooms, total);
+                    // FIX #8: pass total by reference so a hotel resize
+                    // inside admin_menu/setup_hotel is reflected here too
+                    admin_menu(rooms, &total);
                 }
                 else
                 {
@@ -67,12 +68,12 @@ int main()
     } while (role != 2);
     // register the customer information
     registration(CustomerName, PhoneNumber, CustomerEmail);
-
+ 
     // Function Menu
     printf("\n==============================\n");
     printf("Welcome, %s \n", CustomerName);
     printf("How can we help you today?\n");
-
+ 
     // Menu
     int choice;
     char type[15];
@@ -83,7 +84,7 @@ int main()
         printf("\n==============================\n");
         printf("Please pick an action (1-6): ");
         scanf("%d", &choice);
-
+ 
         // ← flush leftover newline
         while (getchar() != '\n')
             ;
@@ -113,10 +114,6 @@ int main()
             break;
         }
     } while (choice != 6);
-=======
-    printf("I like to train future yaoi lovers");
-    printf("I hate not nice people"); // Ctrl + S
-
->>>>>>> e0b6a7a12a2482e3a4973c803d5b9a6d3df58d10
     return 0;
 }
+ 
