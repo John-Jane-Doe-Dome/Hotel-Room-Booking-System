@@ -22,7 +22,7 @@
 211 2 Family 0 165.00 - - - 0
 301 3 Single 0 50.00 - - - 0
 302 3 Single 0 50.00 - - - 0
-303 3 Single 1 50.00 jane 098765464 jane@gmail.com 10
+303 3 Single 2 50.00 jane 098765464 jane@gmail.com 10
 304 3 Single 0 50.00 - - - 0
 305 3 Single 0 50.00 - - - 0
 306 3 Double 0 80.00 - - - 0

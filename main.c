@@ -45,6 +45,7 @@ do{
         while (getchar() != '\n');
 
         if (strcmp(password, Admin_Password) == 0) {
+            // function menu for admin
             admin_menu(rooms, total);
         } else {
             printf("Incorrect password. Access denied.\n");
