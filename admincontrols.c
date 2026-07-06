@@ -21,7 +21,7 @@ void admin_menu(struct Room rooms[], int total)
         {
         case 1:
             //display rooms and customer information for the admin
-            display_all_rooms_for_admin(rooms, total, NULL, NULL, NULL);
+            display_all_rooms_for_admin(rooms, total, NULL, NULL, NULL, 0);
             break;
         case 2:
             // admin set up new hotel
