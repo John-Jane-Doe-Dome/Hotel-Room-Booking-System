@@ -106,11 +106,11 @@ void display_all_rooms(struct Room rooms[], int total)
 }
 
 //display all rooms and info for admin to see
-void display_all_rooms_for_admin(struct Room rooms[], int total, char name[], char phone[], char email[])
+void display_all_rooms_for_admin(struct Room rooms[], int total, char name[], char phone[], char email[], int nights)
 {
-    printf("-------------------------------------------------------------------------------------------------\n");
-    printf("%-6s %-6s %-8s %-12s %-20s %-20s %-30s\n", "Room", "Floor", "Type", "Status", "Guest", "Phone", "Email");
-    printf("-------------------------------------------------------------------------------------------------\n");
+    printf("-----------------------------------------------------------------------------------------------------------------------\n");
+    printf("%-6s %-6s %-8s %-12s %-20s %-20s %-30s %-6s\n", "Room", "Floor", "Type", "Status", "Guest", "Phone", "Email", "Nights");
+    printf("-----------------------------------------------------------------------------------------------------------------------\n");
     for (int i = 0; i < total; i++)
     {
         printf("%-6d %-6d %-8s %-12s",
@@ -121,11 +121,11 @@ void display_all_rooms_for_admin(struct Room rooms[], int total, char name[], ch
         // only shows a name, phone number, and email if the room is occupied
         if (rooms[i].status == AVAILABLE)
         {
-            printf("%-20s %-20s %-30s\n", "-", "-", "-");
+            printf("%-20s %-20s %-30s %-6d\n", "-", "-", "-", 0);
         }
         else
         {
-            printf("%-20s %-20s %-30s\n", rooms[i].guest, rooms[i].phone, rooms[i].email);
+            printf("%-20s %-20s %-30s %-6d\n", rooms[i].guest, rooms[i].phone, rooms[i].email, rooms[i].nights);
         }
     }
     printf("---------------------------------------\n\n");
