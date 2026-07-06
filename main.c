@@ -1,5 +1,14 @@
-#include "register.h"
-#include "viewreserveroom.h"
+#include <stdio.h>
+#include <string.h>
+#include "register.c"
+#include "viewreserveroom.c"
+#include "viewbooking.c"
+#include "checkin.c"
+#include "checkoutpay.c"
+#include "booking.c"
+
+#define Admin_Password "1234"
+
 int main()
 {
     // storage
@@ -15,8 +24,47 @@ int main()
     char CustomerEmail[100];
 
     // creates the room
-    init_rooms(rooms, &total);
+    if (!load_rooms_from_file(rooms, &total)) {
+        printf("No custom hotel setup found. Loading default hotel configuration...\n");
+        init_rooms(rooms, &total);
+        save_rooms_to_file(rooms, total);
+    }
 
+    int role;
+    do {
+        printf("\n===================================\n");
+        printf("Are you logging in as (1. Admin 2. Customer 3. Exit) \n");
+        printf("===================================\n");
+        printf("logging as: ");
+        scanf("%d",&role);
+        while(getchar() != '\n');
+        switch (role) 
+        {
+            case 1:{
+            char password[20];
+                printf("Enter admin password: ");
+                scanf("%s", password);
+                while(getchar() != '\n');
+                
+                if (strcmp(password, Admin_Password) == 0) {
+                    admin_menu(rooms, total);
+                }
+                else
+                {
+                    printf("Incorrect password. Access denied.\n");
+                }
+            }
+                break;
+            case 2:
+                break;
+            case 3:
+                printf("Exiting the program.\n");
+                return 0;
+            default:
+                printf("Invalid choice. Please select 1, 2, or 3.\n");
+                break;
+        }
+    } while (role != 2);
     // register the customer information
     registration(CustomerName, PhoneNumber, CustomerEmail);
 
