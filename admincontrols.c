@@ -20,15 +20,19 @@ void admin_menu(struct Room rooms[], int total)
         switch (choice)
         {
         case 1:
+            //display rooms and customer information for the admin
             display_all_rooms_for_admin(rooms, total, NULL, NULL, NULL);
             break;
         case 2:
+            // admin set up new hotel
             setup_hotel(rooms, &total);
             break;
         case 3:
+            // admin edit a room information (room number/type/price)
             edit_room(rooms, total);
             break;
         case 4:
+            // exit the entire program
             printf("\nExiting the program, thank you for visiting!\n");
             exit(0);
         default:
@@ -39,7 +43,7 @@ void admin_menu(struct Room rooms[], int total)
 }
 
 void save_rooms_to_file(struct Room rooms[], int total)
-{
+{ // save the room information to rooms.txt
     FILE *file = fopen("rooms.txt", "w");
     if (file == NULL)
     {
@@ -63,7 +67,7 @@ void save_rooms_to_file(struct Room rooms[], int total)
 }
 
 int load_rooms_from_file(struct Room rooms[], int *total)
-{
+{ // load the last saved room information from rooms.txt
     FILE *fp = fopen("rooms.txt", "r");
     if (fp == NULL) {
         printf("Error opening file for reading.\n");
@@ -198,7 +202,7 @@ void edit_room(struct Room rooms[], int total)
     scanf("%d", &roomNum);
     while (getchar() != '\n');
 
-    idx = find_room(rooms, total, roomNum);   /* reuse your existing search function */
+    idx = find_room(rooms, total, roomNum);   /* reuse existing search function */
 
     if (idx == -1)
     {
@@ -219,6 +223,7 @@ void edit_room(struct Room rooms[], int total)
     if(strcasecmp(rooms[idx].type, "single") == 0 ||
         strcasecmp(rooms[idx].type, "double") == 0 ||
         strcasecmp(rooms[idx].type, "family") == 0){}
+        // nothing here, it just confirms if it is one of the three types, if not, it will go to the else statement
     else {
         printf("Invalid room type. Please enter Single, Double, or Family.\n");
         goto loop_start;
