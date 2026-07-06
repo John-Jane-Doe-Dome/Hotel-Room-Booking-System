@@ -15,6 +15,8 @@
 #define RESERVED 1
 #define OCCUPIED 2
 
+#define Admin_Password "1234" //Admin Password
+
 // room information
 struct Room
 {
@@ -50,11 +52,12 @@ void admin_menu(struct Room room[],int total);
 
 void init_rooms(struct Room rooms[], int *total);
 void display_all_rooms(struct Room rooms[], int total);
+void display_all_rooms_for_admin(struct Room rooms[], int total, char name[], char phone[], char email[]);
 void book_room(struct Room rooms[], int total, char name[], char phone[], char email[]);
 void display_available_room(struct Room rooms[], int total, char type[]);
 int find_room(struct Room rooms[], int total, int number);
-void check_in(struct Room rooms[], int total);
-void check_out(struct Room rooms[], int total);
+void check_in(struct Room rooms[], int total, char name[], char phone[], char email[]);
+void check_out(struct Room rooms[], int total, char name[], char phone[], char email[]);
 void view_booking(struct Room rooms[], int total);
 
 // file functions
