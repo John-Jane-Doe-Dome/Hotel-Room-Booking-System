@@ -27,39 +27,36 @@ void view_booking(struct Room rooms[], int total)
     // check whether the room actually exist or not
     if (position == -1)
     {
-        printf("The room doesn't exist.");
+        printf("Room %d doesn't exist.\n", numbers);
+        printf("==============================\n");
         return;
     }
 
     // check whether the room have an active booking or not
     if (rooms[position].status == AVAILABLE)
     {
+<<<<<<< HEAD
         // FIX #4: "&d" was a literal typo instead of the "%d" format specifier
         printf("The room %d has no active booking.\n", numbers);
+=======
+        printf("The room %d has no active booking.\n", numbers);
+        printf("==============================\n");
+>>>>>>> Bot
         return;
     }
-    /* ── calculate rate and total bill ── */
-    if (strcmp(rooms[position].type, "Single") == 0)
-        rate = RATE_SINGLE;
-    else if (strcmp(rooms[position].type, "Double") == 0)
-        rate = RATE_DOUBLE;
-    else
-        rate = RATE_FAMILY;
 
-    total_bill = rate * rooms[position].nights;
+    total_bill = rooms[position].price * rooms[position].nights;
 
     /* ── print the booking details ── */
     printf("\n==============================\n");
     printf("       Booking Details\n");
     printf("==============================\n");
     printf("Guest  : %s\n", rooms[position].guest);
-    printf("Phone  : %s\n", rooms[position].phone);
-    printf("Email  : %s\n", rooms[position].email);
     printf("------------------------------\n");
     printf("Floor  : %d\n", rooms[position].floors);
     printf("Room   : %d (%s)\n", rooms[position].numbers, rooms[position].type);
     printf("Nights : %d\n", rooms[position].nights);
-    printf("Rate   : $%.2f / night\n", rate);
+    printf("Rate   : $%.2f / night\n", rooms[position].price);
     printf("Total  : $%.2f\n", total_bill);
     printf("------------------------------\n");
 

@@ -1,10 +1,21 @@
 #include <stdio.h>
 #include <string.h>
+<<<<<<< HEAD
 #include "register.h"
 #include "viewreserveroom.h"
 
 #define Admin_Password "1234"
 
+=======
+#include "admincontrols.c"
+#include "booking.c"
+#include "checkin.c"
+#include "checkoutpay.c"
+#include "register.c"
+#include "viewbooking.c"
+#include "viewreserveroom.c"
+
+>>>>>>> Bot
 int main()
 {
     // storage
@@ -17,15 +28,22 @@ int main()
     char CustomerName[100];
     char PhoneNumber[20];
     char CustomerEmail[100];
+    load_rooms_from_file(rooms, &total);
 
     // creates the room
+<<<<<<< HEAD
     if (!load_rooms_from_file(rooms, &total))
     {
         printf("No custom hotel setup found. Loading default hotel configuration...\n");
+=======
+    if(total == 0){
+        printf("No hotel data found.\nLoading default hotel configuration...\n");
+>>>>>>> Bot
         init_rooms(rooms, &total);
         save_rooms_to_file(rooms, total);
     }
 
+<<<<<<< HEAD
     int role;
     do
     {
@@ -66,8 +84,43 @@ int main()
         default:
             printf("Invalid choice. Please select 1, 2, or 3.\n");
             break;
+=======
+    char role[20];
+do{
+    printf("\n===================================\n");
+    printf("Are you logging in as an 'Admin' or 'Customer'?\nIf niether, type 'exit' to quit the program\n");
+    printf("===================================\n");
+    printf("Logging as: ");
+    scanf("%s", role);
+    while (getchar() != '\n');
+
+    if (strcasecmp(role, "admin") == 0) {
+        char password[20];
+        printf("Enter admin password: ");
+        scanf("%s", password);
+        while (getchar() != '\n');
+
+        if (strcmp(password, Admin_Password) == 0) {
+            // function menu for admin
+            admin_menu(rooms, total);
+        } else {
+            printf("Incorrect password. Access denied.\n");
+>>>>>>> Bot
         }
-    } while (role != 2);
+    }
+    else if (strcasecmp(role, "customer") == 0) {
+        break; // exit the loop and proceed to customer registration
+    }
+    else if (strcasecmp(role, "exit") == 0) {
+        printf("Exiting the program.\n");
+        return 0;
+    }
+    else {
+        printf("Invalid choice. Please type admin, customer, or exit.\n");
+    }
+
+} while (strcasecmp(role, "exit") != 0);
+
     // register the customer information
     registration(CustomerName, PhoneNumber, CustomerEmail);
 
@@ -88,8 +141,7 @@ int main()
         scanf("%d", &choice);
 
         // ← flush leftover newline
-        while (getchar() != '\n')
-            ;
+        while (getchar() != '\n');
         switch (choice)
         {
         case 1:
@@ -102,10 +154,10 @@ int main()
             view_booking(rooms, total);
             break;
         case 4:
-            check_in(rooms, total);
+            check_in(rooms, total, CustomerName, PhoneNumber, CustomerEmail);
             break;
         case 5:
-            check_out(rooms, total);
+            check_out(rooms, total, CustomerName, PhoneNumber, CustomerEmail);
             break;
         case 6:
             printf("Thank you %s!", CustomerName);

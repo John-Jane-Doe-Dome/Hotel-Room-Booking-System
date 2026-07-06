@@ -20,7 +20,6 @@ void init_rooms(struct Room rooms[], int *total)
     // go through each floors
     for (floors = 1; floors <= FLOORS; floors++)
     {
-
         // go through each room in the floor
         for (slot = 1; slot <= ROOMS_PER_FLOORS; slot++)
         {
@@ -103,6 +102,34 @@ void display_all_rooms(struct Room rooms[], int total)
         }
     }
     printf("---------------------------------------\n\n");
+    printf("==============================\n");
+}
+
+//display all rooms and info for admin to see
+void display_all_rooms_for_admin(struct Room rooms[], int total, char name[], char phone[], char email[])
+{
+    printf("-------------------------------------------------------------------------------------------------\n");
+    printf("%-6s %-6s %-8s %-12s %-20s %-20s %-30s\n", "Room", "Floor", "Type", "Status", "Guest", "Phone", "Email");
+    printf("-------------------------------------------------------------------------------------------------\n");
+    for (int i = 0; i < total; i++)
+    {
+        printf("%-6d %-6d %-8s %-12s",
+               rooms[i].numbers,
+               rooms[i].floors,
+               rooms[i].type,
+               status_word(rooms[i].status));
+        // only shows a name, phone number, and email if the room is occupied
+        if (rooms[i].status == AVAILABLE)
+        {
+            printf("%-20s %-20s %-30s\n", "-", "-", "-");
+        }
+        else
+        {
+            printf("%-20s %-20s %-30s\n", rooms[i].guest, rooms[i].phone, rooms[i].email);
+        }
+    }
+    printf("---------------------------------------\n\n");
+    printf("==============================\n");
 }
 
 /*
@@ -146,6 +173,7 @@ int find_room(struct Room rooms[], int total, int numbers)
             return i; // finds it and return its position
     }
     return -1; // doesn't find anything
+<<<<<<< HEAD
 }
 
 //admin set up the hotel at once:
@@ -390,4 +418,6 @@ int load_rooms_from_file(struct Room rooms[], int *total)
     }
     fclose(fp);
     return 1;
+=======
+>>>>>>> Bot
 }
