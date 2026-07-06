@@ -52,7 +52,7 @@ void admin_menu(struct Room room[], int total);
 
 void init_rooms(struct Room rooms[], int *total);
 void display_all_rooms(struct Room rooms[], int total);
-void display_all_rooms_for_admin(struct Room rooms[], int total, char name[], char phone[], char email[]);
+void display_all_rooms_for_admin(struct Room rooms[], int total, char name[], char phone[], char email[], int nights);
 void book_room(struct Room rooms[], int total, char name[], char phone[], char email[]);
 void display_available_room(struct Room rooms[], int total, char type[]);
 int find_room(struct Room rooms[], int total, int number);
