@@ -7,6 +7,7 @@ int main()
     struct Room rooms[MAX_ROOMS];
     int total = 0;
 
+<<<<<<< HEAD
     // customer information
 
     char CustomerName[100];
@@ -64,5 +65,10 @@ int main()
             break;
         }
     } while (choice != 6);
+=======
+    printf("I like to train future yaoi lovers");
+    printf("I hate not nice people"); // Ctrl + S
+
+>>>>>>> e0b6a7a12a2482e3a4973c803d5b9a6d3df58d10
     return 0;
 }

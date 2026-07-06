@@ -34,7 +34,7 @@ void view_booking(struct Room rooms[], int total)
     // check whether the room have an active booking or not
     if (rooms[position].status == AVAILABLE)
     {
-        printf("The room &d has no active booking.\n", numbers);
+        printf("The room %d has no active booking.\n", numbers);
         return;
     }
     /* ── calculate rate and total bill ── */

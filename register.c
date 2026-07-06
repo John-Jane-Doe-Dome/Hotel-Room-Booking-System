@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
@@ -99,3 +100,6 @@ void registration(char CustomerName[100], char PhoneNumber[20], char CustomerEma
         "Phone number must be atleast 9 digits.",
         PhoneNumber, 20, ValidatePhone);
 }
+=======
+
+>>>>>>> e0b6a7a12a2482e3a4973c803d5b9a6d3df58d10
