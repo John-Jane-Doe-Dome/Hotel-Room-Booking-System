@@ -4,9 +4,12 @@
 #include "viewreserveroom.h"
 
 // incase the user enter will all lower case or upper case letter
+// FIX #5: the loop condition compared the index to the character value
+// at that index (garbage/undefined) instead of checking for the null
+// terminator. Fixed to use type[i] != '\0'.
 void fix_type(char type[])
 {
-    for (int i = 0; i < type[i]; i++)
+    for (int i = 0; type[i] != '\0'; i++)
     {
         type[i] = tolower(type[i]);
     }

@@ -46,7 +46,9 @@ struct bookings
 // admin functions
 void setup_hotel(struct Room rooms[], int *total);
 void edit_room(struct Room room[], int total);
-void admin_menu(struct Room room[],int total);
+// FIX #8: total is now passed by reference so setup_hotel's changes
+// (e.g. a resized hotel) are visible back in main()
+void admin_menu(struct Room room[], int *total);
 
 void init_rooms(struct Room rooms[], int *total);
 void display_all_rooms(struct Room rooms[], int total);

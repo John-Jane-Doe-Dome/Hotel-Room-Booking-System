@@ -160,6 +160,13 @@ void setup_hotel(struct Room rooms[], int *total)
     scanf("%d", &numfloors);
     while (getchar() != '\n');
 
+    // FIX #6: validate numfloors before it's used as a divisor below
+    if (numfloors < 1)
+    {
+        printf("Error: Number of floors must be at least 1.\n");
+        return;
+    }
+
     printf("Enter the number of single rooms per floor: ");
     scanf("%d", &singleCount);
     while (getchar() != '\n');
@@ -289,10 +296,12 @@ void edit_room(struct Room rooms[], int total)
     printf("Room %d updated successfully.\n", rooms[idx].numbers);
 }
 
-void admin_menu(struct Room rooms[], int total)
+// FIX #8: admin_menu now takes total by reference so changes made by
+// setup_hotel (e.g. re-running hotel setup) propagate back to main().
+void admin_menu(struct Room rooms[], int *total)
 {
     int choice;
-    
+
     do
     {
         printf("\n------------ADMIN MENU------------\n");
@@ -305,13 +314,13 @@ void admin_menu(struct Room rooms[], int total)
         switch (choice)
         {
         case 1:
-            display_all_rooms(rooms, total);
+            display_all_rooms(rooms, *total);
             break;
         case 2:
-            setup_hotel(rooms, &total);
+            setup_hotel(rooms, total);
             break;
         case 3:
-            edit_room(rooms, total);
+            edit_room(rooms, *total);
             break;
         case 4:
             printf("Exiting admin menu.\n");
@@ -349,27 +358,34 @@ void save_rooms_to_file(struct Room rooms[], int total)
 
 int load_rooms_from_file(struct Room rooms[], int *total)
 {
-    FILE *fp = fopen("room.txt", "r");
+    // FIX #2: read from the same file that save_rooms_to_file() writes to
+    FILE *fp = fopen("rooms.txt", "r");
     if (fp == NULL) {
         *total = 0;
         return 0;
     }
 
     *total = 0;
-    while (*total < MAX_ROOMS && fscanf(fp, "%d %d %14s %d %f %99s %19s %99s %d",
+    // FIX #3: the scan format/argument order now matches exactly what
+    // save_rooms_to_file() writes:
+    // numbers floors type status guest phone email nights price
+    while (*total < MAX_ROOMS && fscanf(fp, "%d %d %14s %d %99s %19s %99s %d %f",
                 &rooms[*total].numbers,
                 &rooms[*total].floors,
                 rooms[*total].type,
                 &rooms[*total].status,
-                &rooms[*total].price,
                 rooms[*total].guest,
                 rooms[*total].phone,
                 rooms[*total].email,
-                &rooms[*total].nights) == 9)
+                &rooms[*total].nights,
+                &rooms[*total].price) == 9)
     {
-        if (strcmp(rooms[*total].guest, "-") == 0) rooms[*total].guest[0] = '\0';
-        if (strcmp(rooms[*total].phone, "-") == 0) rooms[*total].phone[0] = '\0';
-        if (strcmp(rooms[*total].email, "-") == 0) rooms[*total].email[0] = '\0';
+        // FIX (minor/style #3): save_rooms_to_file() writes "N/A" for empty
+        // fields, so check for "N/A" here (previously checked for "-", which
+        // never matched, leaving the literal text "N/A" in loaded records).
+        if (strcmp(rooms[*total].guest, "N/A") == 0) rooms[*total].guest[0] = '\0';
+        if (strcmp(rooms[*total].phone, "N/A") == 0) rooms[*total].phone[0] = '\0';
+        if (strcmp(rooms[*total].email, "N/A") == 0) rooms[*total].email[0] = '\0';
         (*total)++;
     }
     fclose(fp);
