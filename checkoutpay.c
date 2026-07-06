@@ -5,19 +5,20 @@
 /*
     calculates the bill for
 */
+// FIX #1: comparisons were using != (inverted logic) and each branch
+// returned before ever multiplying by nights. Fixed to use == and to
+// return rate * nights.
 float calculate_bill(char type[], int nights)
 {
-    float rates;
-    if (strcmp(type, "Single") != 0)
-        return rates = RATE_SINGLE;
-
-    else if (strcmp(type, "Double") != 0)
-        return rates = RATE_DOUBLE;
-
+    float rate;
+    if (strcmp(type, "Single") == 0)
+        rate = RATE_SINGLE;
+    else if (strcmp(type, "Double") == 0)
+        rate = RATE_DOUBLE;
     else
-        return rates = RATE_FAMILY;
+        rate = RATE_FAMILY;
 
-    return rates * nights;
+    return rate * nights;
 }
 void check_out(struct Room rooms[], int total)
 {
@@ -58,7 +59,8 @@ void check_out(struct Room rooms[], int total)
     printf("Floor: %d\n", rooms[position].floors);
     printf("Room: %d (%s)\n", rooms[position].numbers, rooms[position].type);
     printf("Night: %d\n", rooms[position].nights);
-    printf("Rate: %.2f\n", bills / rooms[position].nights);
+    // guard against divide-by-zero in case nights is ever 0
+    printf("Rate: %.2f\n", rooms[position].nights > 0 ? bills / rooms[position].nights : 0.0f);
     printf("Total: %.2f\n", bills);
     printf("==============================\n");
     printf("Thank you for staying with us!\n");

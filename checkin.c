@@ -2,7 +2,6 @@
 #include <string.h>
 #include <ctype.h>
 #include "viewreserveroom.h"
-// finds the room
 void check_in(struct Room rooms[], int total)
 {
     int numbers;
@@ -14,24 +13,20 @@ void check_in(struct Room rooms[], int total)
 
     position = find_room(rooms, total, numbers);
 
-    // check if the room exist or not
     if (position == -1)
     {
         printf("Room %d does not exist.\n", numbers);
         return;
     }
 
-    // check if the room has been booked or not
     if (rooms[position].status != RESERVED)
     {
         printf("Room %d has not been booked.\n", numbers);
         return;
     }
 
-    // update the information
     rooms[position].status = OCCUPIED;
 
-    // tell the user they have been successfully checked-in
     printf("==============================\n");
     printf("   Check-in successful!\n");
     printf("==============================\n");
