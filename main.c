@@ -1,21 +1,10 @@
 #include <stdio.h>
 #include <string.h>
-<<<<<<< HEAD
 #include "register.h"
 #include "viewreserveroom.h"
 
 #define Admin_Password "1234"
 
-=======
-#include "admincontrols.c"
-#include "booking.c"
-#include "checkin.c"
-#include "checkoutpay.c"
-#include "register.c"
-#include "viewbooking.c"
-#include "viewreserveroom.c"
-
->>>>>>> Bot
 int main()
 {
     // storage
@@ -31,19 +20,13 @@ int main()
     load_rooms_from_file(rooms, &total);
 
     // creates the room
-<<<<<<< HEAD
     if (!load_rooms_from_file(rooms, &total))
     {
         printf("No custom hotel setup found. Loading default hotel configuration...\n");
-=======
-    if(total == 0){
-        printf("No hotel data found.\nLoading default hotel configuration...\n");
->>>>>>> Bot
         init_rooms(rooms, &total);
         save_rooms_to_file(rooms, total);
     }
 
-<<<<<<< HEAD
     int role;
     do
     {
@@ -84,28 +67,6 @@ int main()
         default:
             printf("Invalid choice. Please select 1, 2, or 3.\n");
             break;
-=======
-    char role[20];
-do{
-    printf("\n===================================\n");
-    printf("Are you logging in as an 'Admin' or 'Customer'?\nIf niether, type 'exit' to quit the program\n");
-    printf("===================================\n");
-    printf("Logging as: ");
-    scanf("%s", role);
-    while (getchar() != '\n');
-
-    if (strcasecmp(role, "admin") == 0) {
-        char password[20];
-        printf("Enter admin password: ");
-        scanf("%s", password);
-        while (getchar() != '\n');
-
-        if (strcmp(password, Admin_Password) == 0) {
-            // function menu for admin
-            admin_menu(rooms, total);
-        } else {
-            printf("Incorrect password. Access denied.\n");
->>>>>>> Bot
         }
     }
     else if (strcasecmp(role, "customer") == 0) {
