@@ -175,6 +175,9 @@ int find_room(struct Room rooms[], int total, int numbers)
     return -1; // doesn't find anything
 <<<<<<< HEAD
 }
+=======
+<<<<<<< HEAD
+}
 
 //admin set up the hotel at once:
 //- input the number of floors
@@ -421,3 +424,4 @@ int load_rooms_from_file(struct Room rooms[], int *total)
 =======
 >>>>>>> Bot
 }
+>>>>>>> 840af7bc9ca6f0c292cf1cbe424375f388c4f22b

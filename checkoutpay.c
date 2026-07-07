@@ -2,30 +2,8 @@
 #include <string.h>
 #include <ctype.h>
 #include "viewreserveroom.h"
-<<<<<<< HEAD
-/*
-    calculates the bill for
-*/
-// FIX #1: comparisons were using != (inverted logic) and each branch
-// returned before ever multiplying by nights. Fixed to use == and to
-// return rate * nights.
-float calculate_bill(char type[], int nights)
-{
-    float rate;
-    if (strcmp(type, "Single") == 0)
-        rate = RATE_SINGLE;
-    else if (strcmp(type, "Double") == 0)
-        rate = RATE_DOUBLE;
-    else
-        rate = RATE_FAMILY;
-
-    return rate * nights;
-}
-void check_out(struct Room rooms[], int total)
-=======
 
 void check_out(struct Room rooms[], int total, char name[], char phone[], char email[])
->>>>>>> Bot
 {
     float bills;
     int numbers;
@@ -46,13 +24,16 @@ void check_out(struct Room rooms[], int total, char name[], char phone[], char e
         return;
     }
     // check whether the room is checked-in, reserved, or not
-    if(rooms[position].status != OCCUPIED){
-        if(rooms[position].status != RESERVED){
+    if (rooms[position].status != OCCUPIED)
+    {
+        if (rooms[position].status != RESERVED)
+        {
             printf("Room %d has not been reserved yet.\n", numbers);
             printf("==============================\n");
             return;
         }
-        else{
+        else
+        {
             printf("Room %d has not been checked-in yet.\n", numbers);
             printf("==============================\n");
             return;
@@ -82,12 +63,7 @@ void check_out(struct Room rooms[], int total, char name[], char phone[], char e
     printf("Floor: %d\n", rooms[position].floors);
     printf("Room: %d (%s)\n", rooms[position].numbers, rooms[position].type);
     printf("Night: %d\n", rooms[position].nights);
-<<<<<<< HEAD
-    // guard against divide-by-zero in case nights is ever 0
-    printf("Rate: %.2f\n", rooms[position].nights > 0 ? bills / rooms[position].nights : 0.0f);
-=======
     printf("Price per Night: %.2f\n", bills / rooms[position].nights);
->>>>>>> Bot
     printf("Total: %.2f\n", bills);
     printf("==============================\n");
     printf("Thank you for staying with us!\n");
