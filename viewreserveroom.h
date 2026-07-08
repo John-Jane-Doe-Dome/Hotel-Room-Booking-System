@@ -15,7 +15,7 @@
 #define RESERVED 1
 #define OCCUPIED 2
 
-#define Admin_Password "1234" //Admin Password
+#define Admin_Password "1234" // Admin Password
 
 // room information
 struct Room

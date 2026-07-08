@@ -3,18 +3,15 @@
 #include <ctype.h>
 #include "register.h"
 #include "viewreserveroom.h"
-<<<<<<< HEAD
-void check_in(struct Room rooms[], int total)
-=======
 // finds the room
 void check_in(struct Room rooms[], int total, char name[], char phone[], char email[])
->>>>>>> Bot
 {
     int numbers;
     int position;
     printf("Enter the room number you have booked: ");
     scanf("%d", &numbers);
-    while (getchar() != '\n');
+    while (getchar() != '\n')
+        ;
 
     position = find_room(rooms, total, numbers);
 
@@ -44,13 +41,10 @@ void check_in(struct Room rooms[], int total, char name[], char phone[], char em
 
     rooms[position].status = OCCUPIED;
 
-<<<<<<< HEAD
-=======
     // persist the updated room data to file
     save_rooms_to_file(rooms, total);
 
     // tell the user they have been successfully checked-in
->>>>>>> Bot
     printf("==============================\n");
     printf("   Check-in successful!\n");
     printf("==============================\n");

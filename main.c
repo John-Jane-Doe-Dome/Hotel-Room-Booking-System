@@ -50,7 +50,7 @@ int main()
             {
                 // FIX #8: pass total by reference so a hotel resize
                 // inside admin_menu/setup_hotel is reflected here too
-                admin_menu(rooms, &total);
+                admin_menu(rooms, total);
             }
             else
             {
@@ -102,10 +102,10 @@ int main()
             view_booking(rooms, total);
             break;
         case 4:
-            check_in(rooms, total);
+            check_in(rooms, total, CustomerName, PhoneNumber, CustomerEmail);
             break;
         case 5:
-            check_out(rooms, total);
+            check_out(rooms, total, CustomerName, PhoneNumber, CustomerEmail);
             break;
         case 6:
             printf("Thank you %s!", CustomerName);
