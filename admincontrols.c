@@ -6,10 +6,13 @@
 
 
 // admin function
-void admin_menu(struct Room rooms[], int total)
+// FIX: total is now int * so setup_hotel's update to the room count
+// actually propagates back to main() instead of being lost when this
+// function returns (it was previously passed by value).
+void admin_menu(struct Room rooms[], int *total)
 {
     int choice;
-    
+
     do
     {
         printf("\n------------ADMIN MENU------------\n");
@@ -23,15 +26,15 @@ void admin_menu(struct Room rooms[], int total)
         {
         case 1:
             //display rooms and customer information for the admin
-            display_all_rooms_for_admin(rooms, total, NULL, NULL, NULL, 0);
+            display_all_rooms_for_admin(rooms, *total);
             break;
         case 2:
             // admin set up new hotel
-            setup_hotel(rooms, &total);
+            setup_hotel(rooms, total);
             break;
         case 3:
             // admin edit a room information (room number/type/price)
-            edit_room(rooms, total);
+            edit_room(rooms, *total);
             break;
         case 4:
             // exit the entire program
@@ -54,13 +57,35 @@ void save_rooms_to_file(struct Room rooms[], int total)
     }
     for (int i = 0; i < total; i++)
     {
+        // FIX: guest names are allowed to contain spaces (see
+        // ValidateName in register.c), but this file is parsed back
+        // with fscanf's %s, which treats whitespace as a field
+        // separator. A name like "Saroeun Sothy" would get split
+        // across the guest/phone/email columns on load, corrupting
+        // every field after it. Escape spaces as underscores before
+        // writing so each guest name stays a single %s token; loading
+        // reverses this. '_' is safe because ValidateName never
+        // allows it in a real name.
+        char guest_escaped[100];
+        if (strlen(rooms[i].guest) > 0)
+        {
+            size_t j;
+            for (j = 0; rooms[i].guest[j] != '\0'; j++)
+                guest_escaped[j] = (rooms[i].guest[j] == ' ') ? '_' : rooms[i].guest[j];
+            guest_escaped[j] = '\0';
+        }
+        else
+        {
+            strcpy(guest_escaped, "-");
+        }
+
         fprintf(file, "%d %d %s %d %.2f %s %s %s %d\n",
                 rooms[i].numbers,
                 rooms[i].floors,
                 rooms[i].type,
                 rooms[i].status,
                 rooms[i].price,
-                strlen(rooms[i].guest) > 0 ? rooms[i].guest : "-",
+                guest_escaped,
                 strlen(rooms[i].phone) > 0 ? rooms[i].phone : "-",
                 strlen(rooms[i].email) > 0 ? rooms[i].email : "-",
                 rooms[i].nights);
@@ -72,7 +97,6 @@ int load_rooms_from_file(struct Room rooms[], int *total)
 { // load the last saved room information from rooms.txt
     FILE *fp = fopen("rooms.txt", "r");
     if (fp == NULL) {
-        printf("Error opening file for reading.\n");
         *total = 0;
         return 0;
     }
@@ -89,7 +113,20 @@ int load_rooms_from_file(struct Room rooms[], int *total)
                 rooms[*total].email,
                 &rooms[*total].nights) == 9)
     {
-        if (strcmp(rooms[*total].guest, "-") == 0) rooms[*total].guest[0] = '\0';
+        if (strcmp(rooms[*total].guest, "-") == 0)
+        {
+            rooms[*total].guest[0] = '\0';
+        }
+        else
+        {
+            // FIX: reverse the space->underscore escaping done in
+            // save_rooms_to_file so the guest name displays correctly.
+            for (int k = 0; rooms[*total].guest[k] != '\0'; k++)
+            {
+                if (rooms[*total].guest[k] == '_')
+                    rooms[*total].guest[k] = ' ';
+            }
+        }
         if (strcmp(rooms[*total].phone, "-") == 0) rooms[*total].phone[0] = '\0';
         if (strcmp(rooms[*total].email, "-") == 0) rooms[*total].email[0] = '\0';
         (*total)++;
@@ -137,6 +174,12 @@ void setup_hotel(struct Room rooms[], int *total)
         return;
     }
 
+    if (singleCount < 0 || doubleCount < 0 || familyCount < 0 || numfloors < 1)
+    {
+        printf("Error: Floors must be at least 1 and room counts cannot be negative.\n");
+        return;
+    }
+
     int roomPerfloor = singleCount + doubleCount + familyCount; // Calculate rooms per floor
     totalRoom = roomPerfloor * numfloors; // Calculate total rooms
 
@@ -168,7 +211,7 @@ void setup_hotel(struct Room rooms[], int *total)
                 strcpy(rooms[index].type, "Single");
                 rooms[index].price = singlePrice;
             }
-            else if (slot <= singleCount +doubleCount)
+            else if (slot <= singleCount + doubleCount)
             {
                 strcpy(rooms[index].type, "Double");
                 rooms[index].price = doublePrice;
@@ -218,18 +261,26 @@ void edit_room(struct Room rooms[], int total)
     scanf("%d", &rooms[idx].numbers);
     while (getchar() != '\n');
 
-    loop_start:
-    printf("Enter the new room type (Re-enter the room type if you don't want to change it, with proper capitalization): ");
-    scanf("%s", rooms[idx].type);
-    while (getchar() != '\n');
-    if(strcasecmp(rooms[idx].type, "single") == 0 ||
-        strcasecmp(rooms[idx].type, "double") == 0 ||
-        strcasecmp(rooms[idx].type, "family") == 0){}
-        // nothing here, it just confirms if it is one of the three types, if not, it will go to the else statement
-    else {
-        printf("Invalid room type. Please enter Single, Double, or Family.\n");
-        goto loop_start;
-    }
+    // FIX: replaced goto with a proper do/while loop that re-prompts
+    // for the type on invalid input (goto only re-ran the validation
+    // check, not the scanf, but here we scan inside the loop body).
+    do
+    {
+        printf("Enter the new room type (Re-enter the room type if you don't want to change it, with proper capitalization): ");
+        scanf("%14s", rooms[idx].type);
+        while (getchar() != '\n');
+
+        if (strcasecmp(rooms[idx].type, "single") != 0 &&
+            strcasecmp(rooms[idx].type, "double") != 0 &&
+            strcasecmp(rooms[idx].type, "family") != 0)
+        {
+            printf("Invalid room type. Please enter Single, Double, or Family.\n");
+        }
+        else
+        {
+            break;
+        }
+    } while (1);
 
     printf("Enter the new price (Re-enter the price if you don't want to change it): ");
     scanf("%f", &rooms[idx].price);

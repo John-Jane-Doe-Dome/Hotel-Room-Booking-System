@@ -4,17 +4,14 @@
 #include "viewreserveroom.h"
 
 // incase the user enter will all lower case or upper case letter
-// FIX #5: the loop condition compared the index to the character value
-// at that index (garbage/undefined) instead of checking for the null
-// terminator. Fixed to use type[i] != '\0'.
 void fix_type(char type[])
 {
     for (int i = 0; type[i] != '\0'; i++)
     {
-        type[i] = tolower(type[i]);
+        type[i] = tolower((unsigned char)type[i]);
     }
 
-    type[0] = toupper(type[0]);
+    type[0] = toupper((unsigned char)type[0]);
 }
 
 // gets the prices from the header files
@@ -41,7 +38,7 @@ void book_room(struct Room rooms[], int total, char name[], char phone[], char e
 
     // ask the user what type of room do they want
     printf("Enter a room type(Single / Double / Family): ");
-    scanf("%s", type);
+    scanf("%14s", type); // FIX: width limit to prevent overflowing type[15]
     while (getchar() != '\n')
         ;
 
@@ -94,20 +91,25 @@ void book_room(struct Room rooms[], int total, char name[], char phone[], char e
         return;
     }
 
-    // ask for how long are they staying for
-    printf("Enter the amount of nights you are staying for(1-30): ");
-    scanf("%d", &nights);
-    while (getchar() != '\n')
-        ;
-
-    // validate the amount of nights
-    loop_start:
-    if (nights < 1 || nights > 30)
+    // FIX: previously used "goto loop_start" to validate nights, but the
+    // scanf was outside the label, so an invalid entry (e.g. 0, -5, 31)
+    // would loop back to the same check forever without ever asking
+    // again - an infinite print loop with no way to recover. Now the
+    // prompt and scanf are both inside a do/while loop that repeats
+    // until a valid value (1-30) is entered.
+    do
     {
-        printf("Please enter the correct amount of nights(1-30).\n");
-        printf("==============================\n");
-        goto loop_start;
-    }
+        printf("Enter the amount of nights you are staying for(1-30): ");
+        scanf("%d", &nights);
+        while (getchar() != '\n')
+            ;
+
+        if (nights < 1 || nights > 30)
+        {
+            printf("Please enter the correct amount of nights(1-30).\n");
+            printf("==============================\n");
+        }
+    } while (nights < 1 || nights > 30);
 
     // saves the information
     rooms[position].status = RESERVED;

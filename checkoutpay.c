@@ -63,7 +63,10 @@ void check_out(struct Room rooms[], int total, char name[], char phone[], char e
     printf("Floor: %d\n", rooms[position].floors);
     printf("Room: %d (%s)\n", rooms[position].numbers, rooms[position].type);
     printf("Night: %d\n", rooms[position].nights);
-    printf("Price per Night: %.2f\n", bills / rooms[position].nights);
+    // FIX: print the stored per-night price directly instead of
+    // dividing bills back by nights - avoids a needless float
+    // round-trip and a possible division-by-zero if nights were ever 0.
+    printf("Price per Night: %.2f\n", rooms[position].price);
     printf("Total: %.2f\n", bills);
     printf("==============================\n");
     printf("Thank you for staying with us!\n");

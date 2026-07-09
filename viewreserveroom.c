@@ -8,7 +8,7 @@
  each floors has 10 rooms
  the first 5 rooms will be single
  the next 3 rooms will be double
- the last 2 is fami
+ the last 2 is family
 */
 
 void init_rooms(struct Room rooms[], int *total)
@@ -16,6 +16,17 @@ void init_rooms(struct Room rooms[], int *total)
     int floors;
     int slot;
     *total = 0;
+
+    // FIX: defensive bounds check. FLOORS * ROOMS_PER_FLOORS is currently
+    // 30, well under MAX_ROOMS (200), but if those constants are ever
+    // changed without checking the math, this prevents writing past the
+    // end of the rooms[] array instead of silently corrupting memory.
+    if (FLOORS * ROOMS_PER_FLOORS > MAX_ROOMS)
+    {
+        printf("Error: default configuration (%d rooms) exceeds MAX_ROOMS (%d).\n",
+               FLOORS * ROOMS_PER_FLOORS, MAX_ROOMS);
+        return;
+    }
 
     // go through each floors
     for (floors = 1; floors <= FLOORS; floors++)
@@ -106,7 +117,10 @@ void display_all_rooms(struct Room rooms[], int total)
 }
 
 // display all rooms and info for admin to see
-void display_all_rooms_for_admin(struct Room rooms[], int total, char name[], char phone[], char email[], int nights)
+// FIX: dropped the unused name/phone/email/nights parameters - the
+// function only ever reads guest data out of rooms[], so the extra
+// parameters were dead weight (always passed as NULL/0 by the caller).
+void display_all_rooms_for_admin(struct Room rooms[], int total)
 {
     printf("-----------------------------------------------------------------------------------------------------------------------\n");
     printf("%-6s %-6s %-8s %-12s %-20s %-20s %-30s %-6s\n", "Room", "Floor", "Type", "Status", "Guest", "Phone", "Email", "Nights");

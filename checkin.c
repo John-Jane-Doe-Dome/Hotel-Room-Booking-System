@@ -22,7 +22,18 @@ void check_in(struct Room rooms[], int total, char name[], char phone[], char em
         return;
     }
 
-    if (rooms[position].status != RESERVED && rooms[position].status != OCCUPIED)
+    // FIX: previously OCCUPIED and RESERVED were both accepted here,
+    // meaning an already-checked-in guest could "check in" again and
+    // get a misleading second "Check-in successful!" message with no
+    // actual state change. Now OCCUPIED is explicitly rejected first.
+    if (rooms[position].status == OCCUPIED)
+    {
+        printf("Room %d is already checked in.\n", numbers);
+        printf("==============================\n");
+        return;
+    }
+
+    if (rooms[position].status != RESERVED)
     {
         printf("Room %d has not been booked.\n", numbers);
         printf("==============================\n");

@@ -30,34 +30,27 @@ struct Room
     float price;
 };
 
-// booking records
-struct bookings
-{
-    int id;           // booking ID
-    int room_numbers; // room booked by customer
-    char guest[100];  // guest name when book
-    char phone[20];   // guest phone number when book
-    char email[100];  // guest email when book
-    int nights;       // amount of nights
-    char type[15];    // room type
-    float bills;      // bills
-};
-
-// list of fuction used
+// list of functions used
 // admin functions
+// FIX: total is now passed by pointer so setup_hotel()'s room-count
+// update inside admin_menu actually propagates back to the caller.
 void setup_hotel(struct Room rooms[], int *total);
 void edit_room(struct Room room[], int total);
-void admin_menu(struct Room room[], int total);
+void admin_menu(struct Room room[], int *total);
 
 void init_rooms(struct Room rooms[], int *total);
 void display_all_rooms(struct Room rooms[], int total);
-void display_all_rooms_for_admin(struct Room rooms[], int total, char name[], char phone[], char email[], int nights);
+// FIX: removed unused name/phone/email/nights parameters - the function
+// only ever reads guest data from the rooms[] array itself.
+void display_all_rooms_for_admin(struct Room rooms[], int total);
 void book_room(struct Room rooms[], int total, char name[], char phone[], char email[]);
 void display_available_room(struct Room rooms[], int total, char type[]);
 int find_room(struct Room rooms[], int total, int number);
 void check_in(struct Room rooms[], int total, char name[], char phone[], char email[]);
 void check_out(struct Room rooms[], int total, char name[], char phone[], char email[]);
-void view_booking(struct Room rooms[], int total);
+// FIX: view_booking now requires identity verification, matching
+// check_in/check_out, so customers can't view other guests' bookings.
+void view_booking(struct Room rooms[], int total, char name[], char phone[], char email[]);
 
 // file functions
 void save_rooms_to_file(struct Room rooms[], int total);

@@ -8,11 +8,14 @@
     so that the customer can check their booking after they have book
 */
 
-void view_booking(struct Room rooms[], int total)
+// FIX: now takes the customer's registered name/phone/email and verifies
+// them against the room record, matching check_in/check_out. Previously
+// any customer could look up any room number and see another guest's
+// name, phone number, and email.
+void view_booking(struct Room rooms[], int total, char name[], char phone[], char email[])
 {
     int numbers;
     int position;
-    float rate;
     float total_bill;
 
     // ask the user for the room number that they have booked
@@ -36,6 +39,16 @@ void view_booking(struct Room rooms[], int total)
     if (rooms[position].status == AVAILABLE)
     {
         printf("The room %d has no active booking.\n", numbers);
+        printf("==============================\n");
+        return;
+    }
+
+    // verify that the person viewing matches the registered booking
+    if (strcasecmp(name, rooms[position].guest) != 0 ||
+        strcmp(phone, rooms[position].phone) != 0 ||
+        strcasecmp(email, rooms[position].email) != 0)
+    {
+        printf("\nVerification failed. Your registered details do not match this booking.\n");
         printf("==============================\n");
         return;
     }
