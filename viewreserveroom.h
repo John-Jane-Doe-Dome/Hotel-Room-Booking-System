@@ -5,7 +5,6 @@
 #define FLOORS 3
 #define ROOMS_PER_FLOORS 10
 #define MAX_ROOMS 200
-#define MAX_BOOKINGS 100
 #define RATE_SINGLE 50.00
 #define RATE_DOUBLE 80.00
 #define RATE_FAMILY 150.00
