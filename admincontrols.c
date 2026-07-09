@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include "viewreserveroom.h"
 
+
+// admin function
 void admin_menu(struct Room rooms[], int total)
 {
     int choice;
