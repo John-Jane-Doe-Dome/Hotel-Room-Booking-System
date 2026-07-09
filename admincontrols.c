@@ -219,7 +219,7 @@ void edit_room(struct Room rooms[], int total)
     while (getchar() != '\n');
 
     loop_start:
-    printf("Enter the new room type  (Re-enter the room type if you don't want to change it, with proper capitalization): ");
+    printf("Enter the new room type (Re-enter the room type if you don't want to change it, with proper capitalization): ");
     scanf("%s", rooms[idx].type);
     while (getchar() != '\n');
     if(strcasecmp(rooms[idx].type, "single") == 0 ||
@@ -231,7 +231,7 @@ void edit_room(struct Room rooms[], int total)
         goto loop_start;
     }
 
-    printf("Enter the new price(Re-enter the price if you don't want to change it): ");
+    printf("Enter the new price (Re-enter the price if you don't want to change it): ");
     scanf("%f", &rooms[idx].price);
     while (getchar() != '\n');
 

@@ -22,7 +22,7 @@ void check_in(struct Room rooms[], int total, char name[], char phone[], char em
         return;
     }
 
-    if (rooms[position].status != RESERVED)
+    if (rooms[position].status != RESERVED && rooms[position].status != OCCUPIED)
     {
         printf("Room %d has not been booked.\n", numbers);
         printf("==============================\n");
