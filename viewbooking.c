@@ -35,13 +35,8 @@ void view_booking(struct Room rooms[], int total)
     // check whether the room have an active booking or not
     if (rooms[position].status == AVAILABLE)
     {
-<<<<<<< HEAD
-        // FIX #4: "&d" was a literal typo instead of the "%d" format specifier
-        printf("The room %d has no active booking.\n", numbers);
-=======
         printf("The room %d has no active booking.\n", numbers);
         printf("==============================\n");
->>>>>>> Bot
         return;
     }
 
